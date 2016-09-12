@@ -1,4 +1,8 @@
-# Research how the method center() of the String class works. Use it in your code to make the output beautifully aligned.
+# In the input_students method the cohort value is hard-coded. - DONE
+# How can you ask for both the name and the cohort? - DONE
+# What if one of the values is empty? Can you supply a default value? - DONE
+# The input will be given to you as a string? How will you convert it to a symbol? - DONE
+# What if the user makes a typo? - TO DO
 
 # get student info from user
 def input_students
@@ -12,28 +16,46 @@ def input_students
     if name != ''
       puts "Cohort:"
       cohort = gets.chomp
+      if cohort == ''
+        cohort = 'Sep'
+      end
       puts "Main hobby:"
       hobby = gets.chomp
+      if hobby == ''
+        hobby = 'n/a'
+      end
       puts "Location:"
       location = gets.chomp
+      if location == ''
+        location = 'London'
+      end
       end
 
   # while the name is not empty, repeat this code for all following students
   while !name.empty? do
     # add the student hash to the array
-    students << {name: name, cohort: cohort, hobby: hobby, location: location}
+    students << {name: name.to_sym, cohort: cohort.to_sym, hobby: hobby.to_sym, location: location.to_sym}
     puts "Now we have #{students.count} students"
     # get another name from the user
     puts "Full name:(leave empty if you've finished entering students)"
     name = gets.chomp
-      if name != ''
-          puts "Cohort:"
-          cohort = gets.chomp
-          puts "Main hobby:"
-          hobby = gets.chomp
-          puts "Location:"
-          location = gets.chomp
-        end
+    if name != ''
+      puts "Cohort:"
+      cohort = gets.chomp
+      if cohort == ''
+        cohort = 'Sep'
+      end
+      puts "Main hobby:"
+      hobby = gets.chomp
+      if hobby == ''
+        hobby = 'n/a'
+      end
+      puts "Location:"
+      location = gets.chomp
+      if location == ''
+        location = 'London'
+      end
+      end
   end
     # return the array of students
     students
