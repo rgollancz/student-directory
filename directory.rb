@@ -1,20 +1,39 @@
-# Modify your program to only print the students whose name begins with a specific letter.
+# Our code only works with the student name and cohort. Add more information: hobbies, country of birth, height, etc.
 
-# get student names from user
+# get student info from user
 def input_students
-  puts "Please enter the names of the students"
-  puts "To finish, just hit return twice"
+  puts "Please enter the student's information"
+  puts "When you're done entering information, just hit return twice"
   # create an empty array
   students = []
-  # get the first name
+  # get the first student's details
+  puts "Full name:"
   name = gets.chomp
-  # while the name is not empty, repeat this code
+    if name != ''
+      puts "Cohort:"
+      cohort = gets.chomp
+      puts "Main hobby:"
+      hobby = gets.chomp
+      puts "Location:"
+      location = gets.chomp
+      end
+
+  # while the name is not empty, repeat this code for all following students
   while !name.empty? do
     # add the student hash to the array
-    students << {name: name, cohort: :november}
+    students << {name: name, cohort: cohort, hobby: hobby, location: location}
     puts "Now we have #{students.count} students"
     # get another name from the user
+    puts "Full name:(leave empty if you've finished entering students)"
     name = gets.chomp
+      if name != ''
+          puts "Cohort:"
+          cohort = gets.chomp
+          puts "Main hobby:"
+          hobby = gets.chomp
+          puts "Location:"
+          location = gets.chomp
+        end
   end
     # return the array of students
     students
@@ -35,8 +54,8 @@ def print(students)
   while count < print_total
     # set the student variable to the item in the array (the hash) to be accessed, as determined by the counter
     student = students[count]
-    puts "#{student[:name]} (#{student[:cohort]} cohort)"
-    # increase 
+    puts "#{student[:name]} (#{student[:cohort]} cohort, main hobby: #{student[:hobby]}, location: #{student[:location]})"
+    # increase
     count += 1
   end
 end
