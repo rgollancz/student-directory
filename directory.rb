@@ -25,11 +25,9 @@ def print_header
   puts "-------------"
 end
 
-# iterate through names and ONLY print out students whose names begin with R
 def print(students)
   students.each do |student|
-    name = "#{student[:name]}"
-    if name[0] == 'R'
+    if student[:name].start_with?("R")
       puts "#{student[:name]} (#{student[:cohort]} cohort)"
     end
   end
