@@ -1,19 +1,6 @@
-# add all students into an array
-# students = [
-#   {name: "Dr. Hannibal Lecter", cohort: :november},
-#   {name: "Darth Vader", cohort: :november},
-#   {name: "Nurse Ratched", cohort: :november},
-#   {name: "Michael Corleone", cohort: :november},
-#   {name: "Alex DeLarge", cohort: :november},
-#   {name: "The Wicked Witch of the West", cohort: :november},
-#   {name: "Terminator", cohort: :november},
-#   {name: "Freddy Krueger", cohort: :november},
-#   {name: "The Joker", cohort: :november},
-#   {name: "Joffrey Baratheon", cohort: :november},
-#   {name: "Norman Bates", cohort: :november},
-# ]
-# and then print them
+# Modify your program to only print the students whose name begins with a specific letter.
 
+# get student names from user
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
@@ -38,9 +25,13 @@ def print_header
   puts "-------------"
 end
 
+# iterate through names and ONLY print out students whose names begin with R
 def print(students)
-  students.each.with_index(1) do |student,index|
-  puts "#{index}. #{student[:name]} (#{student[:cohort]} cohort)"
+  students.each do |student|
+    name = "#{student[:name]}"
+    if name[0] == 'R'
+      puts "#{student[:name]} (#{student[:cohort]} cohort)"
+    end
   end
 end
 
