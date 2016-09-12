@@ -25,11 +25,19 @@ def print_header
   puts "-------------"
 end
 
+# Task: rewrite the each() method that prints all students using while or until control flow methods
 def print(students)
-  students.each do |student|
-    if student[:name].start_with?("R")
-      puts "#{student[:name]} (#{student[:cohort]} cohort)"
-    end
+  # set a value that we will set the method to loop up until - i.e. the number of students in the students array
+  print_total = students.length
+  # set a counter to increase during each loop
+  count = 0
+  # keep looping until the print_total has been reached - i.e. until every element in the array has been run through
+  while count < print_total
+    # set the student variable to the item in the array (the hash) to be accessed, as determined by the counter
+    student = students[count]
+    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+    # increase 
+    count += 1
   end
 end
 
