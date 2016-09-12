@@ -1,4 +1,4 @@
-# Our code only works with the student name and cohort. Add more information: hobbies, country of birth, height, etc.
+# Research how the method center() of the String class works. Use it in your code to make the output beautifully aligned.
 
 # get student info from user
 def input_students
@@ -40,8 +40,8 @@ def input_students
 end
 
 def print_header
-  puts "The students of Villains Academy"
-  puts "-------------"
+  puts "The students of Villains Academy".center(100)
+  puts "-------------".center(100)
 end
 
 # Task: rewrite the each() method that prints all students using while or until control flow methods
@@ -54,14 +54,14 @@ def print(students)
   while count < print_total
     # set the student variable to the item in the array (the hash) to be accessed, as determined by the counter
     student = students[count]
-    puts "#{student[:name]} (#{student[:cohort]} cohort, main hobby: #{student[:hobby]}, location: #{student[:location]})"
+    puts "#{student[:name]} (#{student[:cohort]} cohort, main hobby: #{student[:hobby]}, location: #{student[:location]})".center(100)
     # increase
     count += 1
   end
 end
 
 def print_footer(names)
-  puts "Overall, we have #{names.count} great students"
+  puts "Overall, we have #{names.count} great students".center(100)
 end
 
 students = input_students
