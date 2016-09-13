@@ -91,14 +91,35 @@ def print_footer(names)
   end
 end
 
+def interactive_menu
+  students = []
+  loop do
+    # print the menu and ask the user what to do
+    puts "1. Input the students"
+    puts "2. Display the students"
+    puts "9. Exit"
+    # read the input and save it into a variable
+    selection = gets.chomp
+    # do what the user has asked
+    case selection
+    when "1"
+      students = input_students
+    when "2"
+      print_header
+      print_students(students)
+      print_footer
+    when "9"
+      exit
+    else
+      puts "I don't know what you mean, please try again."
+    end
+  end
+end
+
 # The following array of hashes is for use in quick testing
 # students = [{name: "Hatty Jones", cohort: 'April 2016', hobby: 'climbing', location: 'Berlin'},
 #              {name: "Rosie Gollancz", cohort: 'February 2016', hobby: 'trapeze', location: 'San Francisco'},
 #              {name: "Lauren Ingram", cohort: 'September 2016', hobby: 'juggling', location: 'Austin'},
 #              {name: "Ruby Doobey", cohort: 'April 2016', hobby: 'climbing', location: 'Geneva'}]
 
-students = input_students
-print_header
-print_students(students)
-# print_cohorts(students)
-print_footer(students)
+interactive_menu
