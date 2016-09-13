@@ -10,10 +10,11 @@ def input_students
   puts "When you're done entering information, just hit return twice"
   # create an empty array
   students = []
-  # get the first student's details
-  puts "Full name:"
-  name = gets.chomp
-    if name != ''
+
+  while true
+    puts "Full name:"
+    name = gets.chomp
+    break if name.empty?
       puts "Cohort:"
       cohort = gets.chomp
       if cohort == ''
@@ -29,37 +30,12 @@ def input_students
       if location == ''
         location = 'London'
       end
-      end
-
-  # while the name is not empty, repeat this code for all following students
-  while !name.empty? do
-    # add the student hash to the array
     students << {name: name.to_sym, cohort: cohort.to_sym, hobby: hobby.to_sym, location: location.to_sym}
     puts "Now we have #{students.count} students"
-    # get another name from the user
-    puts "Full name:(leave empty if you've finished entering students)"
-    name = gets.chomp
-    if name != ''
-      puts "Cohort:"
-      cohort = gets.chomp
-      if cohort == ''
-        cohort = 'Sep'
-      end
-      puts "Main hobby:"
-      hobby = gets.chomp
-      if hobby == ''
-        hobby = 'n/a'
-      end
-      puts "Location:"
-      location = gets.chomp
-      if location == ''
-        location = 'London'
-      end
-      end
   end
-    # return the array of students
-    students
+  students
 end
+
 
 def print_header
   puts "The students of Villains Academy".center(100)
@@ -67,7 +43,7 @@ def print_header
 end
 
 # Task: rewrite the each() method that prints all students using while or until control flow methods
-def print(students)
+def print_students(students)
   # set a value that we will set the method to loop up until - i.e. the number of students in the students array
   print_total = students.length
   # set a counter to increase during each loop
@@ -88,5 +64,5 @@ end
 
 students = input_students
 print_header
-print(students)
+print_students(students)
 print_footer(students)
