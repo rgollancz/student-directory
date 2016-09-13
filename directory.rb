@@ -6,21 +6,21 @@ def input_students
   students = []
 
   while true
-    puts "Full name:"
-    name = gets.chomp
+    puts "Enter full name:"
+    name = gets[0...-1]
     break if name.empty?
-      puts "Cohort (e.g. 'February 2016'):"
-      cohort = gets.chomp
+      puts "Enter cohort (e.g. 'February 2016'):"
+      cohort = gets[0...-1]
       if cohort == ''
         cohort = 'September 2016'
       end
-      puts "Main hobby:"
-      hobby = gets.chomp
+      puts "Enter main hobby:"
+      hobby = gets[0...-1]
       if hobby == ''
         hobby = 'n/a'
       end
-      puts "Location:"
-      location = gets.chomp
+      puts "Enter location:"
+      location = gets[0...-1]
       if location == ''
         location = 'London'
       end
