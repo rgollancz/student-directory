@@ -1,9 +1,3 @@
-# In the input_students method the cohort value is hard-coded. - DONE
-# How can you ask for both the name and the cohort? - DONE
-# What if one of the values is empty? Can you supply a default value? - DONE
-# The input will be given to you as a string? How will you convert it to a symbol? - DONE
-# What if the user makes a typo? - TO DO
-
 # get student info from user
 def input_students
   puts "Please enter the student's information"
@@ -15,10 +9,10 @@ def input_students
     puts "Full name:"
     name = gets.chomp
     break if name.empty?
-      puts "Cohort:"
+      puts "Cohort (e.g. 'February 2016'):"
       cohort = gets.chomp
       if cohort == ''
-        cohort = 'Sep'
+        cohort = 'September 2016'
       end
       puts "Main hobby:"
       hobby = gets.chomp
@@ -35,7 +29,6 @@ def input_students
   end
   students
 end
-
 
 def print_header
   puts "The students of Villains Academy".center(100)
@@ -58,11 +51,38 @@ def print_students(students)
   end
 end
 
+# Task: print students grouped by cohorts
+def print_cohorts(students)
+  # create list of existing cohorts - method could be improved by creating this list automatically from the directory
+  cohorts = ['February 2016','April 2016','September 2016']
+  # iterate through the cohorts array one cohort at a time
+  cohorts.map do |month|
+    # convert the month to a symbol (since we're doing that during the input stage)
+    month = month.to_sym
+    # iterate through the students array
+    students.find do |student|
+      # if the student's cohort matches the current month in the cohort array, puts the student's information
+      if student[:cohort] == month
+        puts "#{student[:name]} (#{student[:cohort]} cohort), main hobby: #{student[:hobby]}, location: #{student[:location]})".center(100)
+      end
+      # add a line break between cohorts
+      puts
+    end
+  end
+end
+
 def print_footer(names)
   puts "Overall, we have #{names.count} great students".center(100)
 end
 
+# The following array of hashes is for use in quick testing
+# students = [{name: "Hatty Jones", cohort: 'April 2016', hobby: 'climbing', location: 'Berlin'},
+#              {name: "Rosie Gollancz", cohort: 'February 2016', hobby: 'trapeze', location: 'San Francisco'},
+#              {name: "Lauren Ingram", cohort: 'September 2016', hobby: 'juggling', location: 'Austin'},
+#              {name: "Ruby Doobey", cohort: 'April 2016', hobby: 'climbing', location: 'Geneva'}]
+
 students = input_students
 print_header
-print_students(students)
+# print_students(students)
+print_cohorts(students)
 print_footer(students)
