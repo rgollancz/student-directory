@@ -72,7 +72,11 @@ def print_cohorts(students)
 end
 
 def print_footer(names)
-  puts "Overall, we have #{names.count} great students".center(100)
+  if names.length == 1
+    puts  "Overall, we have #{names.count} great student".center(100)
+  else
+    puts "Overall, we have #{names.count} great students".center(100)
+  end
 end
 
 # The following array of hashes is for use in quick testing
@@ -83,6 +87,6 @@ end
 
 students = input_students
 print_header
-# print_students(students)
-print_cohorts(students)
+print_students(students)
+# print_cohorts(students)
 print_footer(students)
