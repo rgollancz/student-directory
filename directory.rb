@@ -7,24 +7,36 @@ def input_students
 
   while true
     puts "Enter full name:"
-    name = gets[0...-1]
+    name = gets.chomp
     break if name.empty?
       puts "Enter cohort (e.g. 'February 2016'):"
-      cohort = gets[0...-1]
+      cohort = gets.chomp
       if cohort == ''
         cohort = 'September 2016'
       end
       puts "Enter main hobby:"
-      hobby = gets[0...-1]
+      hobby = gets.chomp
       if hobby == ''
         hobby = 'n/a'
       end
       puts "Enter location:"
-      location = gets[0...-1]
+      location = gets.chomp
       if location == ''
         location = 'London'
       end
-    students << {name: name.to_sym, cohort: cohort.to_sym, hobby: hobby.to_sym, location: location.to_sym}
+      puts 'You entered:'
+      puts "Name: #{name}"
+      puts "Cohort: #{cohort}"
+      puts "Hobby: #{hobby}"
+      puts "Location: #{location}"
+      puts "Made a mistake? Enter 'x' to re-enter the information, or any other key to save."
+      answer = gets.chomp
+        if answer == 'x'
+          puts "Student information deleted!"
+        else
+          students << {name: name.to_sym, cohort: cohort.to_sym, hobby: hobby.to_sym, location: location.to_sym}
+          puts "Student information saved!"
+        end
     puts "Now we have #{students.count} students"
   end
   students
