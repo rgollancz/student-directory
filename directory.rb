@@ -7,20 +7,20 @@ def input_students
 
   while true
     puts "Enter full name:"
-    name = gets.chomp
+    name = STDIN.gets.chomp
     break if name.empty?
       puts "Enter cohort (e.g. 'February 2016'):"
-      cohort = gets.chomp
+      cohort = STDIN.gets.chomp
       if cohort == ''
         cohort = 'September 2016'
       end
       puts "Enter main hobby:"
-      hobby = gets.chomp
+      hobby = STDIN.gets.chomp
       if hobby == ''
         hobby = 'n/a'
       end
       puts "Enter location:"
-      location = gets.chomp
+      location = STDIN.gets.chomp
       if location == ''
         location = 'London'
       end
@@ -30,7 +30,7 @@ def input_students
       puts "Hobby: #{hobby}"
       puts "Location: #{location}"
       puts "Made a mistake? Enter 'x' to re-enter the information, or any other key to save."
-      answer = gets.chomp
+      answer = STDIN.gets.chomp
         if answer == 'x'
           puts "Student information deleted!"
         else
@@ -122,7 +122,7 @@ end
 def interactive_menu
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -138,13 +138,25 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort, hobby, location = line.chomp.split(',')
       @students << {name: name.to_sym, cohort: cohort.to_sym, hobby: hobby.to_sym, location: location.to_sym}
     end
     file.close
+end
+
+def try_load_students
+  filename = ARGV.first # the first argument from the command line
+  return if filename.nil? # get out of the method if the filename argument was not passed in with the program
+  if File.exists?(filename) # if a filename was passed in, AND it exists
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else # if a filename was passed in, but the file doesn't exist
+    puts "Sorry, #{filename} doesn't exist."
+    exit # quit the program
+  end
 end
 
 # The following array of hashes is for use in quick testing
