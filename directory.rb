@@ -1,45 +1,82 @@
 @students = []
 
+def interactive_menu
+  load_students('no')
+  loop do
+    print_menu
+    process(STDIN.gets.chomp)
+  end
+end
+
+def print_menu
+  puts "1. Input new students"
+  puts "2. Display current students"
+  puts "3. Save the list of students"
+  puts "4. Load the list of students"
+  puts "9. Exit"
+end
+
+def process(selection)
+  case selection
+  when "1"
+    input_students
+  when "2"
+    show_students
+  when "3"
+    save_students
+  when "4"
+    load_students
+  when "9"
+    exit
+  else
+    puts "I don't know what you mean. Please try again."
+  end
+end
+
 # get student info from user
 def input_students
   puts "Please enter the student's information"
   puts "When you're done entering information, just hit return twice"
-
   while true
-    puts "Enter full name:"
-    name = STDIN.gets.chomp
+    name = ask_question("Enter full name: (hit enter if you've finished entering students)")
     break if name.empty?
-      puts "Enter cohort (e.g. 'February 2016'):"
-      cohort = STDIN.gets.chomp
-      if cohort == ''
-        cohort = 'September 2016'
-      end
-      puts "Enter main hobby:"
-      hobby = STDIN.gets.chomp
-      if hobby == ''
-        hobby = 'n/a'
-      end
-      puts "Enter location:"
-      location = STDIN.gets.chomp
-      if location == ''
-        location = 'London'
-      end
-      puts 'You entered:'
-      puts "Name: #{name}"
-      puts "Cohort: #{cohort}"
-      puts "Hobby: #{hobby}"
-      puts "Location: #{location}"
-      puts "Made a mistake? Enter 'x' to re-enter the information, or any other key to save."
-      answer = STDIN.gets.chomp
-        if answer == 'x'
-          puts "Student information deleted!"
-        else
-          @students << {name: name.to_sym, cohort: cohort.to_sym, hobby: hobby.to_sym, location: location.to_sym}
-          puts "Student information saved!"
-        end
+    cohort = ask_question("Enter cohort (e.g. 'February 2016'):",'September 2016')
+    hobby = ask_question("Enter main hobby:",'n/a')
+    location = ask_question("Enter location:",'n/a')
+    check_current_student_info(name,cohort,hobby,location)
     puts "Now we have #{@students.count} students"
   end
 end
+
+def ask_question(question,defaultAnswer = '')
+  puts question
+  answer = STDIN.gets.chomp
+    if answer == ''
+      answer = defaultAnswer
+    end
+    answer
+end
+
+def check_current_student_info(name,cohort,hobby,location)
+  puts 'You entered:'
+  puts "Name: #{name}"
+  puts "Cohort: #{cohort}"
+  puts "Hobby: #{hobby}"
+  puts "Location: #{location}"
+  puts "Made a mistake? Enter 'x' to re-enter the information, or any other key to save."
+  answer = STDIN.gets.chomp
+    if answer == 'x'
+      puts "Student information deleted!"
+    else
+      add_students({name: name.to_sym, cohort: cohort.to_sym, hobby: hobby.to_sym, location: location.to_sym})
+      puts "Student information saved!"
+    end
+end
+
+def add_students(info)
+  @students << info
+end
+
 
 def print_header
   puts "The students of Villains Academy".center(100)
@@ -88,64 +125,67 @@ def print_footer
   end
 end
 
-def print_menu
-  puts "1. Input new students"
-  puts "2. Display current students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list of students from students.csv"
-  puts "9. Exit"
-end
-
 def show_students
   print_header
   print_students_list
   print_footer
 end
 
-def process(selection)
-  case selection
-  when "1"
-    input_students
-  when "2"
-    show_students
-  when "3"
-    save_students
-  when "4"
-    load_students
-  when "9"
-    exit
-  else
-    puts "I don't know what you mean. Please try again."
-  end
-end
-
-def interactive_menu
-  loop do
-    print_menu
-    process(STDIN.gets.chomp)
-  end
-end
-
 def save_students
-  # open the file for writing
-  file = File.open("students.csv", "w")
-  # iterate over the array of students
-  @students.each do |student|
-    student_data = [student[:name], student[:cohort], student[:hobby], student[:location]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+  puts "Please enter the name and extension of the file you would like to save to:"
+  file_to_save_to = STDIN.gets.chomp
+  if File.exists?(file_to_save_to)
+    file = File.open("students.csv", "w")
+    @students.each do |student|
+      student_data = [student[:name], student[:cohort], student[:hobby], student[:location]]
+      csv_line = student_data.join(",")
+      file.puts csv_line
+    end
+    file.close
+    puts "Student list updated!"
+  else
+    puts "That file doesn't seem to exist. Would you like to create a new file?"
+    puts "Enter 'yes' or 'no'"
+    answer = STDIN.gets.chomp
+      if answer != 'yes'
+        create_file(file_to_save_to)
+      end
   end
+end
+
+def create_file(filename)
+  file = File.new(filename, "w")
+  puts "#{file_to_save_to} created!"
   file.close
 end
 
-def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-    name, cohort, hobby, location = line.chomp.split(',')
-      @students << {name: name.to_sym, cohort: cohort.to_sym, hobby: hobby.to_sym, location: location.to_sym}
+def load_students(auto = 'yes')
+  if auto == 'no'
+      puts "Would you like to load an existing list of students?"
+      puts "Enter 'yes' or 'no'"
+      auto = STDIN.gets.chomp
     end
-    file.close
-end
+  if auto == 'yes'
+      puts "Please enter the name and extension of the file you would like to open:"
+      file_to_open = STDIN.gets.chomp
+      if File.exists?(file_to_open)
+        File.open(file_to_open, "r") do |f|
+          f.readlines.each do |line|
+              name, cohort, hobby, location = line.chomp.split(',')
+                add_students({name: name.to_sym, cohort: cohort.to_sym, hobby: hobby.to_sym, location: location.to_sym})
+          end
+        end
+      puts "#{file_to_open} loaded!"
+      else
+        puts "That file doesn't seem to exist. Would you like to create a new file?"
+        puts "Enter 'yes' or 'no'"
+        answer = STDIN.gets.chomp
+          if answer != 'yes'
+            create_file(file_to_open)
+          end
+      end
+    end
+  end
 
 def try_load_students
   filename = ARGV.first # the first argument from the command line
@@ -158,6 +198,7 @@ def try_load_students
     exit # quit the program
   end
 end
+
 
 # The following array of hashes is for use in quick testing
 # students = [{name: "Hatty Jones", cohort: 'April 2016', hobby: 'climbing', location: 'Berlin'},
