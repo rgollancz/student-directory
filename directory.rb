@@ -11,8 +11,8 @@ end
 def print_menu
   puts "1. Input new students"
   puts "2. Display current students"
-  puts "3. Save the list of students"
-  puts "4. Load the list of students"
+  puts "3. Save new students"
+  puts "4. Load existing list of students"
   puts "9. Exit"
 end
 
@@ -135,13 +135,13 @@ def save_students
   puts "Please enter the name and extension of the file you would like to save to:"
   file_to_save_to = STDIN.gets.chomp
   if File.exists?(file_to_save_to)
-    file = File.open("students.csv", "w")
+    File.open("students.csv", "w") do |f|
     @students.each do |student|
       student_data = [student[:name], student[:cohort], student[:hobby], student[:location]]
       csv_line = student_data.join(",")
-      file.puts csv_line
+      f.puts csv_line
     end
-    file.close
+  end
     puts "Student list updated!"
   else
     puts "That file doesn't seem to exist. Would you like to create a new file?"
