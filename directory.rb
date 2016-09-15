@@ -144,7 +144,7 @@ def save_students
   puts "Please confirm the name and extension of the file you would like to save to:"
   file_to_save_to = STDIN.gets.chomp
   if File.exists?(file_to_save_to)
-    CSV.open("students.csv", "a+") do |csv|
+    CSV.open(file_to_save_to, "a+") do |csv|
       @students.each do |student|
       student_data = [student[:name].to_s, student[:cohort].to_s, student[:hobby].to_s, student[:location].to_s]
       csv << student_data
@@ -200,7 +200,9 @@ def try_load_students
     puts "*** Loaded #{@students.count} from #{filename} ***"
     puts
   else # if a filename was passed in, but the file doesn't exist
-    puts "Sorry, #{filename} doesn't exist."
+    puts
+    puts "*** Sorry, #{filename} doesn't exist ***"
+    puts
     exit # quit the program
   end
 end
