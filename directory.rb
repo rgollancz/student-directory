@@ -1,3 +1,4 @@
+require 'csv'
 @students = []
 
 def interactive_menu
@@ -9,11 +10,17 @@ def interactive_menu
 end
 
 def print_menu
+  puts '------------------------------------'
+  puts
+  puts "Please enter the number of the menu item you would like to select:"
   puts "1. Input new students"
   puts "2. Display current students"
   puts "3. Save new students"
   puts "4. Load existing list of students"
   puts "9. Exit"
+  puts
+  puts '------------------------------------'
+  puts
 end
 
 def process(selection)
@@ -44,7 +51,6 @@ def input_students
     hobby = ask_question("Enter main hobby:",'n/a')
     location = ask_question("Enter location:",'n/a')
     check_current_student_info(name,cohort,hobby,location)
-    puts "Now we have #{@students.count} students"
   end
 end
 
@@ -63,13 +69,15 @@ def check_current_student_info(name,cohort,hobby,location)
   puts "Cohort: #{cohort}"
   puts "Hobby: #{hobby}"
   puts "Location: #{location}"
-  puts "Made a mistake? Enter 'x' to re-enter the information, or any other key to save."
+  puts "Made a mistake? Enter 'x' to re-enter the information, or any other key to keep."
   answer = STDIN.gets.chomp
     if answer == 'x'
-      puts "Student information deleted!"
+      puts "*** Student information deleted! ***"
+      puts
     else
       add_students({name: name.to_sym, cohort: cohort.to_sym, hobby: hobby.to_sym, location: location.to_sym})
-      puts "Student information saved!"
+      puts "*** Student information entered! ***"
+      puts
     end
 end
 
@@ -81,6 +89,7 @@ end
 def print_header
   puts "The students of Villains Academy".center(100)
   puts "-------------".center(100)
+  puts
 end
 
 def print_students_list
@@ -132,31 +141,26 @@ def show_students
 end
 
 def save_students
-  puts "Please enter the name and extension of the file you would like to save to:"
+  puts "Please confirm the name and extension of the file you would like to save to:"
   file_to_save_to = STDIN.gets.chomp
   if File.exists?(file_to_save_to)
-    File.open("students.csv", "w") do |f|
-    @students.each do |student|
-      student_data = [student[:name], student[:cohort], student[:hobby], student[:location]]
-      csv_line = student_data.join(",")
-      f.puts csv_line
+    CSV.open("students.csv", "a+") do |csv|
+      @students.each do |student|
+      student_data = [student[:name].to_s, student[:cohort].to_s, student[:hobby].to_s, student[:location].to_s]
+      csv << student_data
+      end
     end
-  end
-    puts "Student list updated!"
+    puts
+    puts "*** Student list updated! ***"
+    puts
   else
-    puts "That file doesn't seem to exist. Would you like to create a new file?"
+    puts "That file doesn't seem to exist. Would you like to try another file?"
     puts "Enter 'yes' or 'no'"
     answer = STDIN.gets.chomp
-      if answer != 'yes'
-        create_file(file_to_save_to)
+      if answer == 'yes'
+        save_students
       end
   end
-end
-
-def create_file(filename)
-  file = File.new(filename, "w")
-  puts "#{file_to_save_to} created!"
-  file.close
 end
 
 def load_students(auto = 'yes')
@@ -164,26 +168,26 @@ def load_students(auto = 'yes')
       puts "Would you like to load an existing list of students?"
       puts "Enter 'yes' or 'no'"
       auto = STDIN.gets.chomp
-    end
+  end
   if auto == 'yes'
       puts "Please enter the name and extension of the file you would like to open:"
       file_to_open = STDIN.gets.chomp
       if File.exists?(file_to_open)
-        File.open(file_to_open, "r") do |f|
-          f.readlines.each do |line|
-              name, cohort, hobby, location = line.chomp.split(',')
+        CSV.foreach(file_to_open) do |row|
+                name, cohort, hobby, location = row.join(',').split(',')
                 add_students({name: name.to_sym, cohort: cohort.to_sym, hobby: hobby.to_sym, location: location.to_sym})
-          end
-        end
-      puts "#{file_to_open} loaded!"
+              end
+      puts
+      puts "***  #{file_to_open} loaded! ***"
+      puts
       else
-        puts "That file doesn't seem to exist. Would you like to create a new file?"
+        puts "That file doesn't seem to exist. Would you like to try entering another file name?"
         puts "Enter 'yes' or 'no'"
         answer = STDIN.gets.chomp
-          if answer != 'yes'
-            create_file(file_to_open)
+          if answer == 'yes'
+            load_students
           end
-      end
+        end
     end
   end
 
@@ -192,7 +196,9 @@ def try_load_students
   return if filename.nil? # get out of the method if the filename argument was not passed in with the program
   if File.exists?(filename) # if a filename was passed in, AND it exists
     load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
+    puts
+    puts "*** Loaded #{@students.count} from #{filename} ***"
+    puts
   else # if a filename was passed in, but the file doesn't exist
     puts "Sorry, #{filename} doesn't exist."
     exit # quit the program
